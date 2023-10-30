@@ -21,7 +21,7 @@ export function useCommand(commands: Commands = {}) {
       if (typeof commands[commandName] === "function") {
         commands[commandName]!(param);
         searchParams.delete(name);
-        shouldUpdate = false;
+        shouldUpdate = true;
       }
     });
 
