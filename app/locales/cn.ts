@@ -8,7 +8,7 @@ const cn = {
   Error: {
     Unauthorized: isApp
       ? "检测到无效 API Key，请前往[设置](/#/settings)页检查 API Key 是否配置正确。"
-      : "访问密码不正确或为空，请前往[登录](/#/auth)页输入正确的访问密码，或者在[设置](/#/settings)页填入你自己的 OpenAI API Key。",
+      : "访问密码不正确或为空，请前往[权限](/#/auth)页输入正确的访问密码，或前往[登录](/#/login)页登录，或者在[设置](/#/settings)页填入你自己的 OpenAI API Key。",
   },
   Auth: {
     Title: "需要密码",
@@ -17,6 +17,8 @@ const cn = {
     Input: "在此处填写访问码",
     Confirm: "确认",
     Later: "稍后再说",
+    Vip: "该模型需要VIP才能使用",
+    Wallet: "积分不足请充值",
   },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 条对话`,
@@ -123,6 +125,35 @@ const cn = {
     DeleteChat: "确认删除选中的对话？",
     DeleteToast: "已删除会话",
     Revert: "撤销",
+  },
+  User: {
+    Title: "用户",
+    SubTitle: "用户信息界面",
+    Login: "登录",
+    LoginTitle: "用户登录",
+    Register: "注册",
+    RegisterTitle: "注册新用户",
+    Findpwd: "找回密码",
+    FindpwdTitle: "输入账号密码将发送至您的邮箱",
+    Name: "用户名",
+    Wallet: "用户积分",
+    Mail: "用户邮箱",
+    SigState: "签到状态",
+    Ststus: "登出",
+    Vip: "会员",
+    kami: "兑换码",
+    NickName: "昵称",
+    User: "账号(纯数字)",
+    Password: "密码(最少六位)",
+    Email: "邮箱",
+    Code: "验证码",
+    Pass: {
+      Title: "修改密码",
+      OldPwd: "旧密码",
+      NewPwd: "新密码",
+      NewPwd1: "确认密码",
+    },
+    Save: "保存",
   },
   Settings: {
     Title: "设置",

@@ -3,7 +3,7 @@ import { getServerSideConfig } from "../config/server";
 import md5 from "spark-md5";
 import { ACCESS_CODE_PREFIX } from "../constant";
 
-function getIP(req: NextRequest) {
+export function getIP(req: NextRequest) {
   let ip = req.ip ?? req.headers.get("x-real-ip");
   const forwardedFor = req.headers.get("x-forwarded-for");
 
@@ -26,6 +26,7 @@ function parseApiKey(bearToken: string) {
 
 export function auth(req: NextRequest) {
   const authToken = req.headers.get("Authorization") ?? "";
+  const auth = req.headers.get("auth") ?? "";
 
   // check if it is openai api key or user token
   const { accessCode, apiKey: token } = parseApiKey(authToken);
@@ -36,15 +37,37 @@ export function auth(req: NextRequest) {
   console.log("[Auth] allowed hashed codes: ", [...serverConfig.codes]);
   console.log("[Auth] got access code:", accessCode);
   console.log("[Auth] hashed access code:", hashedCode);
+  console.log("[Auth] get auth:", auth);
+  console.log("[Auth] get token:", token);
   console.log("[User IP] ", getIP(req));
   console.log("[Time] ", new Date().toLocaleString());
 
-  if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !token) {
-    return {
-      error: true,
-      msg: !accessCode ? "empty access code" : "wrong access code",
-    };
+  if (!token) {
+    if (serverConfig.needCode) {
+      if (!auth) {
+        if (!serverConfig.codes.has(hashedCode)) {
+          return {
+            error: true,
+            msg: !accessCode ? "empty access code" : "wrong access code",
+          };
+        }
+      }
+    } else {
+      if (!auth) {
+        return {
+          error: true,
+          msg: "Please go login page to login.",
+        };
+      }
+    }
   }
+
+  // if (!serverConfig.adminUrl) {
+  //   return {
+  //     error: true,
+  //     msg: "empty admin url",
+  //   };
+  // }
 
   // if user does not provide an api key, inject system api key
   if (!token) {

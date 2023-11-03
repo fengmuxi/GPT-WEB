@@ -6,6 +6,7 @@ declare global {
       OPENAI_API_KEY?: string;
       CODE?: string;
       BASE_URL?: string;
+      ADMIN_URL?: string;
       PROXY_URL?: string;
       VERCEL?: string;
       HIDE_USER_API_KEY?: string; // disable user's api key input
@@ -30,6 +31,32 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   }
 })();
 
+const VIP_CODES = (function getVipCodes(): Set<string> {
+  const code = process.env.VIP_CODE;
+
+  try {
+    const codes = (code?.split(",") ?? [])
+      .filter((v) => !!v)
+      .map((v) => md5.hash(v.trim()));
+    return new Set(codes);
+  } catch (e) {
+    return new Set();
+  }
+})();
+
+const VIP_MODELS = (function getVipModels(): Set<string> {
+  const model = process.env.VIP_MODEL;
+
+  try {
+    const models = (model?.split(",") ?? [])
+      .filter((v) => !!v)
+      .map((v) => md5.hash(v.trim()));
+    return new Set(models);
+  } catch (e) {
+    return new Set();
+  }
+})();
+
 export const getServerSideConfig = () => {
   if (typeof process === "undefined") {
     throw Error(
@@ -41,8 +68,11 @@ export const getServerSideConfig = () => {
     apiKey: process.env.OPENAI_API_KEY,
     code: process.env.CODE,
     codes: ACCESS_CODES,
+    vipCodes: VIP_CODES,
+    vipModels: VIP_MODELS,
     needCode: ACCESS_CODES.size > 0,
     baseUrl: process.env.BASE_URL,
+    adminUrl: process.env.ADMIN_URL,
     proxyUrl: process.env.PROXY_URL,
     isVercel: !!process.env.VERCEL,
     hideUserApiKey: !!process.env.HIDE_USER_API_KEY,

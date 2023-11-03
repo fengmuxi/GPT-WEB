@@ -11,6 +11,7 @@ import CloseIcon from "../icons/close.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
+import User from "../icons/user.svg";
 
 import Locale from "../locales";
 
@@ -206,10 +207,15 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          <div className={styles["sidebar-action"]}>
+          {/* <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
               <IconButton icon={<GithubIcon />} shadow />
             </a>
+          </div> */}
+          <div className={styles["sidebar-action"]}>
+            <Link to={Path.User}>
+              <IconButton icon={<User />} shadow />
+            </Link>
           </div>
         </div>
         <div>

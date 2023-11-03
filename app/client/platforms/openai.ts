@@ -1,10 +1,16 @@
 import {
+  ACCESS_CODE_PREFIX,
   DEFAULT_API_HOST,
   DEFAULT_MODELS,
   OpenaiPath,
   REQUEST_TIMEOUT_MS,
 } from "@/app/constant";
-import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
+import {
+  useAccessStore,
+  useAppConfig,
+  useChatStore,
+  useUserStore,
+} from "@/app/store";
 
 import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
 import Locale from "../../locales";
@@ -14,6 +20,10 @@ import {
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
+import { messageBody, userapi } from "../userapi";
+import { getServerSideConfig } from "@/app/config/server";
+import md5 from "spark-md5";
+import { get } from "http";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -26,6 +36,8 @@ export interface OpenAIListModelResponse {
 
 export class ChatGPTApi implements LLMApi {
   private disableListModels = true;
+  private serverConfig = getServerSideConfig();
+  private validString = (x: string) => x && x.length > 0;
 
   path(path: string): string {
     let openaiUrl = useAccessStore.getState().openaiUrl;
@@ -44,6 +56,16 @@ export class ChatGPTApi implements LLMApi {
     return [openaiUrl, path].join("/");
   }
 
+  code(): string {
+    if (
+      useAccessStore.getState().enabledAccessControl() &&
+      this.validString(useAccessStore.getState().accessCode)
+    ) {
+      return md5.hash(useAccessStore.getState().accessCode ?? "").trim();
+    }
+    return "";
+  }
+
   extractMessage(res: any) {
     return res.choices?.at(0)?.message?.content ?? "";
   }
@@ -53,6 +75,18 @@ export class ChatGPTApi implements LLMApi {
       role: v.role,
       content: v.content,
     }));
+
+    const getBody = (
+      messageType: string,
+      messageText: string,
+      messageSource: string,
+    ) => {
+      return {
+        messageType: messageType,
+        messageText: messageText,
+        messageSource: messageSource,
+      } as messageBody;
+    };
 
     const modelConfig = {
       ...useAppConfig.getState().modelConfig,
@@ -93,16 +127,51 @@ export class ChatGPTApi implements LLMApi {
         REQUEST_TIMEOUT_MS,
       );
 
+      if (useAccessStore.getState().auth) {
+        userapi.llm.addChatMessage(
+          getBody("文字", messages[messages.length - 1].content, "user"),
+        );
+      }
+
       if (shouldStream) {
         let responseText = "";
         let finished = false;
 
         const finish = () => {
           if (!finished) {
+            console.log("responseText:" + responseText);
+            if (useAccessStore.getState().auth) {
+              userapi.llm.addChatMessage(
+                getBody("文字", responseText, modelConfig.model),
+              );
+            }
             options.onFinish(responseText);
             finished = true;
           }
         };
+
+        const code = this.code();
+        const config = this.serverConfig;
+
+        if (this.serverConfig.vipModels.has(modelConfig.model)) {
+          if (
+            !useUserStore.getState().is_vip ||
+            !this.serverConfig.vipCodes.has(this.code())
+          ) {
+            responseText = Locale.Auth.Vip;
+            return finish();
+          }
+        }
+
+        if (
+          !useUserStore.getState().is_vip &&
+          useUserStore.getState().wallet < 1 &&
+          !this.serverConfig.vipCodes.has(this.code()) &&
+          useAccessStore.getState().auth
+        ) {
+          responseText = Locale.Auth.Wallet;
+          return finish();
+        }
 
         controller.signal.onabort = finish;
 
@@ -150,6 +219,14 @@ export class ChatGPTApi implements LLMApi {
           },
           onmessage(msg) {
             if (msg.data === "[DONE]" || finished) {
+              if (
+                (!useUserStore.getState().is_vip ||
+                  !config.vipCodes.has(code)) &&
+                useAccessStore.getState().auth
+              ) {
+                userapi.llm.updateWallet(1);
+              }
+
               return finish();
             }
             const text = msg.data;
@@ -174,11 +251,44 @@ export class ChatGPTApi implements LLMApi {
           openWhenHidden: true,
         });
       } else {
+        if (this.serverConfig.vipModels.has(modelConfig.model)) {
+          if (
+            !useUserStore.getState().is_vip ||
+            !this.serverConfig.vipCodes.has(this.code())
+          ) {
+            options.onFinish(Locale.Auth.Vip);
+            return;
+          }
+        }
+
+        if (
+          !useUserStore.getState().is_vip &&
+          useUserStore.getState().wallet < 1 &&
+          !this.serverConfig.vipCodes.has(this.code()) &&
+          useAccessStore.getState().auth
+        ) {
+          options.onFinish(Locale.Auth.Wallet);
+          return;
+        }
+
         const res = await fetch(chatPath, chatPayload);
         clearTimeout(requestTimeoutId);
 
         const resJson = await res.json();
         const message = this.extractMessage(resJson);
+
+        if (
+          (!useUserStore.getState().is_vip ||
+            !this.serverConfig.vipCodes.has(this.code())) &&
+          useAccessStore.getState().auth
+        ) {
+          userapi.llm.updateWallet(1);
+        }
+        if (useAccessStore.getState().auth) {
+          userapi.llm.addChatMessage(
+            getBody("文字", message, modelConfig.model),
+          );
+        }
         options.onFinish(message);
       }
     } catch (e) {
@@ -253,29 +363,30 @@ export class ChatGPTApi implements LLMApi {
   }
 
   async models(): Promise<LLMModel[]> {
-    if (this.disableListModels) {
-      return DEFAULT_MODELS.slice();
-    }
+    // if (this.disableListModels) {
+    //   return DEFAULT_MODELS.slice();
+    // }
 
-    const res = await fetch(this.path(OpenaiPath.ListModelPath), {
-      method: "GET",
-      headers: {
-        ...getHeaders(),
-      },
-    });
+    // const res = await fetch(this.path(OpenaiPath.ListModelPath), {
+    //   method: "GET",
+    //   headers: {
+    //     ...getHeaders(),
+    //   },
+    // });
 
-    const resJson = (await res.json()) as OpenAIListModelResponse;
-    const chatModels = resJson.data?.filter((m) => m.id.startsWith("gpt-"));
-    console.log("[Models]", chatModels);
+    // const resJson = (await res.json()) as OpenAIListModelResponse;
+    // const chatModels = resJson.data?.filter((m) => m.id.startsWith("gpt-"));
+    // console.log("[Models]", chatModels);
 
-    if (!chatModels) {
-      return [];
-    }
+    // if (!chatModels) {
+    //   return [];
+    // }
 
-    return chatModels.map((m) => ({
-      name: m.id,
-      available: true,
-    }));
+    // return chatModels.map((m) => ({
+    //   name: m.id,
+    //   available: true,
+    // }));
+    return [];
   }
 }
 export { OpenaiPath };

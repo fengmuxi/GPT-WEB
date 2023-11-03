@@ -55,6 +55,22 @@ const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
+const User = dynamic(async () => (await import("./user")).User, {
+  loading: () => <Loading noLogo />,
+});
+
+const FindPwd = dynamic(async () => (await import("./findpwd")).FindPwd, {
+  loading: () => <Loading noLogo />,
+});
+
+const Login = dynamic(async () => (await import("./login")).Login, {
+  loading: () => <Loading noLogo />,
+});
+
+const Register = dynamic(async () => (await import("./register")).Register, {
+  loading: () => <Loading noLogo />,
+});
+
 export function useSwitchTheme() {
   const config = useAppConfig();
 
@@ -128,7 +144,8 @@ function Screen() {
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
-  const shouldTightBorder = getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+  const shouldTightBorder =
+    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
   useEffect(() => {
     loadAsyncGoogleFont();
@@ -158,6 +175,10 @@ function Screen() {
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
+              <Route path={Path.User} element={<User />} />
+              <Route path={Path.Login} element={<Login />} />
+              <Route path={Path.Findpwd} element={<FindPwd />} />
+              <Route path={Path.Register} element={<Register />} />
             </Routes>
           </div>
         </>

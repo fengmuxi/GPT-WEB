@@ -11,6 +11,7 @@ console.log("[API] default openai url", DEFAULT_OPENAI_URL);
 
 const DEFAULT_ACCESS_STATE = {
   token: "",
+  auth: "",
   accessCode: "",
   needCode: true,
   hideUserApiKey: false,
@@ -35,16 +36,25 @@ export const useAccessStore = createPersistStore(
     updateToken(token: string) {
       set(() => ({ token: token?.trim() }));
     },
+    updateAuth(auth: string) {
+      set(() => ({ auth: auth?.trim() }));
+    },
     updateOpenAiUrl(url: string) {
       set(() => ({ openaiUrl: url?.trim() }));
     },
     isAuthorized() {
       this.fetch();
 
+      if (!!get().token) {
+        return !!get().token;
+      } else {
+        return (
+          (!!get().accessCode && this.enabledAccessControl()) ||
+          (!!get().auth && !this.enabledAccessControl()) ||
+          (this.enabledAccessControl() && !!get().auth)
+        );
+      }
       // has token or has code or disabled access control
-      return (
-        !!get().token || !!get().accessCode || !this.enabledAccessControl()
-      );
     },
     fetch() {
       if (fetchState > 0 || getClientConfig()?.buildMode === "export") return;

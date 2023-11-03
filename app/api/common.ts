@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export const OPENAI_URL = "api.openai.com";
+export const EL_ADMIN_URL = "eladmin.dwzynj.top";
 const DEFAULT_PROTOCOL = "https";
 const PROTOCOL = process.env.PROTOCOL || DEFAULT_PROTOCOL;
 const BASE_URL = process.env.BASE_URL || OPENAI_URL;
+const ADMIN_URL = process.env.ADMIN_URL || EL_ADMIN_URL;
 const DISABLE_GPT4 = !!process.env.DISABLE_GPT4;
 
 export async function requestOpenai(req: NextRequest) {
@@ -20,7 +22,7 @@ export async function requestOpenai(req: NextRequest) {
     baseUrl = `${PROTOCOL}://${baseUrl}`;
   }
 
-  if (baseUrl.endsWith('/')) {
+  if (baseUrl.endsWith("/")) {
     baseUrl = baseUrl.slice(0, -1);
   }
 
@@ -31,9 +33,12 @@ export async function requestOpenai(req: NextRequest) {
     console.log("[Org ID]", process.env.OPENAI_ORG_ID);
   }
 
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, 10 * 60 * 1000);
+  const timeoutId = setTimeout(
+    () => {
+      controller.abort();
+    },
+    10 * 60 * 1000,
+  );
 
   const fetchUrl = `${baseUrl}/${openaiPath}`;
   const fetchOptions: RequestInit = {
@@ -95,4 +100,17 @@ export async function requestOpenai(req: NextRequest) {
   } finally {
     clearTimeout(timeoutId);
   }
+}
+
+export function getAdminUrl() {
+  let baseUrl = ADMIN_URL;
+
+  if (!baseUrl.startsWith("http")) {
+    baseUrl = `${PROTOCOL}://${baseUrl}`;
+  }
+
+  if (!baseUrl.endsWith("/")) {
+    baseUrl = baseUrl + "/";
+  }
+  return baseUrl;
 }

@@ -18,6 +18,10 @@ export enum Path {
   NewChat = "/new-chat",
   Masks = "/masks",
   Auth = "/auth",
+  User = "/user",
+  Login = "/login",
+  Register = "/register",
+  Findpwd = "/findpwd",
 }
 
 export enum ApiPath {
@@ -41,6 +45,7 @@ export enum StoreKey {
   Prompt = "prompt-store",
   Update = "chat-update",
   Sync = "sync",
+  User = "el-admin",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;
@@ -66,6 +71,24 @@ export const OpenaiPath = {
   ListModelPath: "v1/models",
 };
 
+export const AdminPath = {
+  chatmessage: "api/chatMessage/addChatMessage",
+  code: "auth/code",
+  findpwd: "api/users/restPwd",
+  info: "api/users/getInfo",
+  kami: "api/userKami/exchangeKaMi",
+  login: "auth/loginWeb",
+  logout: "auth/logout",
+  mail: "api/code/registerEmail",
+  register: "api/users/registerUser",
+  restmail: "api/code/email/resetPass",
+  set: "api/users/myCenter",
+  sig: "api/users/sig",
+  updatePass: "api/users/updatePass",
+  vip: "api/users/isVip",
+  wallet: "api/users/setWallet",
+};
+
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
 export const DEFAULT_SYSTEM_TEMPLATE = `
 You are ChatGPT, a large language model trained by OpenAI.
@@ -73,52 +96,72 @@ Knowledge cutoff: 2021-09
 Current model: {{model}}
 Current time: {{time}}`;
 
-export const SUMMARIZE_MODEL = "gpt-3.5-turbo";
+export const SUMMARIZE_MODEL = "ERNIE-Bot-turbo";
 
 export const DEFAULT_MODELS = [
   {
-    name: "gpt-4",
+    name: "ERNIE-Bot",
     available: true,
+  },
+  {
+    name: "ERNIE-Bot-turbo",
+    available: true,
+  },
+  {
+    name: "Embedding-V1",
+    available: true,
+  },
+  {
+    name: "qwen-v1",
+    available: true,
+  },
+  {
+    name: "qwen-plus-v1",
+    available: true,
+  },
+  {
+    name: "gpt-4",
+    available: false,
   },
   {
     name: "gpt-4-0314",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-0613",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k-0314",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-4-32k-0613",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-0301",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-0613",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-16k",
-    available: true,
+    available: false,
   },
   {
     name: "gpt-3.5-turbo-16k-0613",
-    available: true,
+    available: false,
   },
 ] as const;
 

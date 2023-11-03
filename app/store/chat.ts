@@ -525,6 +525,7 @@ export const useChatStore = createPersistStore(
               );
             },
           });
+          // session.topic = DEFAULT_TOPIC
         }
 
         const modelConfig = session.mask.modelConfig;
