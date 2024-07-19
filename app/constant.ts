@@ -46,6 +46,7 @@ export enum StoreKey {
   Update = "chat-update",
   Sync = "sync",
   User = "el-admin",
+  VipConfig = "vip-config",
 }
 
 export const DEFAULT_SIDEBAR_WIDTH = 300;
@@ -96,9 +97,13 @@ Knowledge cutoff: 2021-09
 Current model: {{model}}
 Current time: {{time}}`;
 
-export const SUMMARIZE_MODEL = "ERNIE-Bot-turbo";
+export const SUMMARIZE_MODEL = "ep-20240719034240-fxfpz";
 
 export const DEFAULT_MODELS = [
+  {
+    name: "ep-20240719034240-fxfpz",
+    available: true,
+  },
   {
     name: "ERNIE-Bot",
     available: true,
@@ -111,58 +116,58 @@ export const DEFAULT_MODELS = [
     name: "Embedding-V1",
     available: true,
   },
-  {
-    name: "qwen-v1",
-    available: true,
-  },
-  {
-    name: "qwen-plus-v1",
-    available: true,
-  },
-  {
-    name: "gpt-4",
-    available: false,
-  },
-  {
-    name: "gpt-4-0314",
-    available: false,
-  },
-  {
-    name: "gpt-4-0613",
-    available: false,
-  },
-  {
-    name: "gpt-4-32k",
-    available: false,
-  },
-  {
-    name: "gpt-4-32k-0314",
-    available: false,
-  },
-  {
-    name: "gpt-4-32k-0613",
-    available: false,
-  },
-  {
-    name: "gpt-3.5-turbo",
-    available: false,
-  },
-  {
-    name: "gpt-3.5-turbo-0301",
-    available: false,
-  },
-  {
-    name: "gpt-3.5-turbo-0613",
-    available: false,
-  },
-  {
-    name: "gpt-3.5-turbo-16k",
-    available: false,
-  },
-  {
-    name: "gpt-3.5-turbo-16k-0613",
-    available: false,
-  },
+  // {
+  //   name: "qwen-v1",
+  //   available: true,
+  // },
+  // {
+  //   name: "qwen-plus-v1",
+  //   available: true,
+  // },
+  // {
+  //   name: "gpt-4",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-4-0314",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-4-0613",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-4-32k",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-4-32k-0314",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-4-32k-0613",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-3.5-turbo",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-3.5-turbo-0301",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-3.5-turbo-0613",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-3.5-turbo-16k",
+  //   available: false,
+  // },
+  // {
+  //   name: "gpt-3.5-turbo-16k-0613",
+  //   available: false,
+  // },
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;

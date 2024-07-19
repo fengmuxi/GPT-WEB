@@ -519,7 +519,7 @@ export function ChatActions(props: {
         <Selector
           defaultSelectedValue={currentModel}
           items={models.map((m) => ({
-            title: m,
+            title: m + (useAccessStore.getState().isVipModel(m) ? "(VIP)" : ""),
             value: m,
           }))}
           onClose={() => setShowModelSelector(false)}

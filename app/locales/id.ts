@@ -4,8 +4,9 @@ import { PartialLocaleType } from "./index";
 const id: PartialLocaleType = {
   WIP: "Coming Soon...",
   Error: {
-    Unauthorized: "Akses tidak diizinkan, silakan masukkan kode akses atau masukkan kunci API OpenAI Anda. di halaman [autentikasi](/#/auth) atau di halaman [Pengaturan](/#/settings).",
-  },  
+    Unauthorized:
+      "Akses tidak diizinkan, silakan masukkan kode akses atau masukkan kunci API OpenAI Anda. di halaman [autentikasi](/#/auth) atau di halaman [Pengaturan](/#/settings).",
+  },
   Auth: {
     Title: "Diperlukan Kode Akses",
     Tips: "Masukkan kode akses di bawah",
@@ -13,6 +14,8 @@ const id: PartialLocaleType = {
     Input: "Kode Akses",
     Confirm: "Konfirmasi",
     Later: "Nanti",
+    Vip: "该模型需要VIP才能使用",
+    Wallet: "积分不足请充值",
   },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} pesan`,
@@ -110,6 +113,35 @@ const id: PartialLocaleType = {
     DeleteChat: "Anda yakin ingin menghapus percakapan yang dipilih?",
     DeleteToast: "Percakapan telah dihapus",
     Revert: "Kembali",
+  },
+  User: {
+    Title: "用户",
+    SubTitle: "用户信息界面",
+    Login: "登录",
+    LoginTitle: "用户登录",
+    Register: "注册",
+    RegisterTitle: "注册新用户",
+    Findpwd: "找回密码",
+    FindpwdTitle: "输入账号密码将发送至您的邮箱",
+    Name: "用户名",
+    Wallet: "用户积分",
+    Mail: "用户邮箱",
+    SigState: "签到状态",
+    Ststus: "登出",
+    Vip: "会员",
+    kami: "兑换码",
+    NickName: "昵称",
+    User: "账号(纯数字)",
+    Password: "密码(最少六位)",
+    Email: "邮箱",
+    Code: "验证码",
+    Pass: {
+      Title: "修改密码",
+      OldPwd: "旧密码",
+      NewPwd: "新密码",
+      NewPwd1: "确认密码",
+    },
+    Save: "保存",
   },
   Settings: {
     Title: "Pengaturan",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getServerSideConfig } from "../../config/server";
+import { Base64 } from "js-base64";
 
 const serverConfig = getServerSideConfig();
 
@@ -11,6 +12,8 @@ const DANGER_CONFIG = {
   hideUserApiKey: serverConfig.hideUserApiKey,
   disableGPT4: serverConfig.disableGPT4,
   hideBalanceQuery: serverConfig.hideBalanceQuery,
+  vipCodes: Base64.encode(serverConfig.vipCode) as string,
+  vipModels: Base64.encode(serverConfig.vipModel) as string,
 };
 
 declare global {
@@ -18,6 +21,7 @@ declare global {
 }
 
 async function handle() {
+  console.log([...serverConfig.vipModels]);
   return NextResponse.json(DANGER_CONFIG);
 }
 

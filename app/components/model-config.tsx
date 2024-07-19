@@ -1,4 +1,9 @@
-import { ModalConfigValidator, ModelConfig, useAppConfig } from "../store";
+import {
+  ModalConfigValidator,
+  ModelConfig,
+  useAppConfig,
+  useUserStore,
+} from "../store";
 
 import Locale from "../locales";
 import { InputRange } from "./input-range";
@@ -27,6 +32,7 @@ export function ModelConfigList(props: {
           {config.allModels().map((v, i) => (
             <option value={v.name} key={i} disabled={!v.available}>
               {v.name}
+              {useUserStore.getState().isVipModel(v.name) ? "(vip)" : ""}
             </option>
           ))}
         </Select>

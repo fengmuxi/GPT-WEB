@@ -108,13 +108,14 @@ export function User() {
   };
 
   function getVip() {
-    const curDate = new Date();
-    const paramDate = new Date(useStor.vip_time.replace(/-/g, "/"));
-    console.log(paramDate);
-    if (curDate >= paramDate) {
-      return true;
-    }
-    return false;
+    // const curDate = new Date();
+    // const paramDate = new Date(useStor.vip_time.replace(/-/g, "/"));
+    // console.log(paramDate);
+    // if (curDate >= paramDate) {
+    //   return true;
+    // }
+    // return false;
+    return useStor.is_vip;
   }
 
   function getVipTime() {
@@ -138,6 +139,7 @@ export function User() {
       useStor.getUserInfo();
     }
     setUserName(useStor.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -213,7 +215,7 @@ export function User() {
           <ListItem title={Locale.User.Vip}>
             <div className={styles.font}>
               <div className={styles.vipState}>
-                {getVip() ? "非会员" : "会员"}
+                {getVip() ? "会员" : "非会员"}
               </div>
               <div className={styles.vipTime}>{getVipTime()}</div>
             </div>
@@ -282,11 +284,21 @@ export function User() {
               }}
             />
           </ListItem>
+          <ListItem title="登录">
+            <IconButton
+              className={styles.loginButton}
+              disabled={!!accessStore.auth}
+              text="登录"
+              onClick={() => {
+                navigate(Path.Login);
+              }}
+            />
+          </ListItem>
           <ListItem title={Locale.User.Ststus}>
             <IconButton
               className={styles.logoutButton}
               disabled={!accessStore.auth}
-              text="登出"
+              text={Locale.User.Ststus}
               onClick={() => {
                 useStor.logOut().then(() => {
                   accessStore.updateAuth("");

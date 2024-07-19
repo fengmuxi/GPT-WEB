@@ -62,6 +62,7 @@ export interface UserStore {
   getRestPwdCode: (mail: string) => void;
   updatePass: (oldPass: string, newPass: string) => void;
   isVip: (time: string) => void;
+  isVipModel: (model: string) => void;
 }
 export const DEFAULT_USER = {
   user: "",
@@ -199,6 +200,7 @@ export const useUserStore = createPersistStore(
       let responsedata = await userapi.llm.getUserInfo();
       if (responsedata.flag) {
         let data = responsedata.data;
+        let isVip = await this.isVip();
         this.updateInfo(
           data.nickName,
           data.wallet,
@@ -206,7 +208,7 @@ export const useUserStore = createPersistStore(
           data.email,
           data.sigState,
           data.head,
-          await this.isVip(),
+          isVip,
         );
       } else {
         showToast(responsedata.msg);
@@ -276,10 +278,16 @@ export const useUserStore = createPersistStore(
       let response = await userapi.llm.isVip();
       console.log(response);
       if (response.flag) {
-        return true;
+        if (response.msg == "会员") {
+          return true;
+        }
+        return false;
       } else {
         return false;
       }
+    },
+    isVipModel(model: string) {
+      return useAccessStore.getState().isVipModel(model);
     },
   }),
   {

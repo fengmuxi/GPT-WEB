@@ -21,9 +21,6 @@ import {
 import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { messageBody, userapi } from "../userapi";
-import { getServerSideConfig } from "@/app/config/server";
-import md5 from "spark-md5";
-import { get } from "http";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -36,7 +33,6 @@ export interface OpenAIListModelResponse {
 
 export class ChatGPTApi implements LLMApi {
   private disableListModels = true;
-  private serverConfig = getServerSideConfig();
   private validString = (x: string) => x && x.length > 0;
 
   path(path: string): string {
@@ -61,7 +57,7 @@ export class ChatGPTApi implements LLMApi {
       useAccessStore.getState().enabledAccessControl() &&
       this.validString(useAccessStore.getState().accessCode)
     ) {
-      return md5.hash(useAccessStore.getState().accessCode ?? "").trim();
+      return useAccessStore.getState().accessCode;
     }
     return "";
   }
@@ -71,6 +67,10 @@ export class ChatGPTApi implements LLMApi {
   }
 
   async chat(options: ChatOptions) {
+    if (!useAccessStore.getState().isAuthorized()) {
+      options.onFinish(Locale.Error.Unauthorized);
+      return;
+    }
     const messages = options.messages.map((v) => ({
       role: v.role,
       content: v.content,
@@ -151,12 +151,11 @@ export class ChatGPTApi implements LLMApi {
         };
 
         const code = this.code();
-        const config = this.serverConfig;
 
-        if (this.serverConfig.vipModels.has(modelConfig.model)) {
+        if (useAccessStore.getState().isVipModel(modelConfig.model)) {
           if (
-            !useUserStore.getState().is_vip ||
-            !this.serverConfig.vipCodes.has(this.code())
+            !useUserStore.getState().is_vip &&
+            !useAccessStore.getState().isVipCode(this.code())
           ) {
             responseText = Locale.Auth.Vip;
             return finish();
@@ -166,8 +165,8 @@ export class ChatGPTApi implements LLMApi {
         if (
           !useUserStore.getState().is_vip &&
           useUserStore.getState().wallet < 1 &&
-          !this.serverConfig.vipCodes.has(this.code()) &&
-          useAccessStore.getState().auth
+          !useAccessStore.getState().isVipCode(this.code()) &&
+          !useAccessStore.getState().auth
         ) {
           responseText = Locale.Auth.Wallet;
           return finish();
@@ -220,12 +219,18 @@ export class ChatGPTApi implements LLMApi {
           onmessage(msg) {
             if (msg.data === "[DONE]" || finished) {
               if (
-                (!useUserStore.getState().is_vip ||
-                  !config.vipCodes.has(code)) &&
-                useAccessStore.getState().auth
+                !useUserStore.getState().is_vip &&
+                !useAccessStore.getState().isVipCode(code)
               ) {
                 userapi.llm.updateWallet(1);
               }
+
+              // if (
+              //   !useUserStore.getState().is_vip &&
+              //   useAccessStore.getState().auth
+              // ) {
+              //   userapi.llm.updateWallet(1);
+              // }
 
               return finish();
             }
@@ -251,25 +256,40 @@ export class ChatGPTApi implements LLMApi {
           openWhenHidden: true,
         });
       } else {
-        if (this.serverConfig.vipModels.has(modelConfig.model)) {
+        if (useAccessStore.getState().isVipModel(modelConfig.model)) {
           if (
-            !useUserStore.getState().is_vip ||
-            !this.serverConfig.vipCodes.has(this.code())
+            !useUserStore.getState().is_vip &&
+            !useAccessStore.getState().isVipCode(this.code())
           ) {
             options.onFinish(Locale.Auth.Vip);
             return;
           }
+          // if (
+          //   !useUserStore.getState().is_vip
+          // ) {
+          //   options.onFinish(Locale.Auth.Vip);
+          //   return;
+          // }
         }
 
         if (
           !useUserStore.getState().is_vip &&
           useUserStore.getState().wallet < 1 &&
-          !this.serverConfig.vipCodes.has(this.code()) &&
-          useAccessStore.getState().auth
+          !useAccessStore.getState().isVipCode(this.code()) &&
+          !useAccessStore.getState().auth
         ) {
           options.onFinish(Locale.Auth.Wallet);
           return;
         }
+
+        // if (
+        //   !useUserStore.getState().is_vip &&
+        //   useUserStore.getState().wallet < 1 &&
+        //   useAccessStore.getState().auth
+        // ) {
+        //   options.onFinish(Locale.Auth.Wallet);
+        //   return;
+        // }
 
         const res = await fetch(chatPath, chatPayload);
         clearTimeout(requestTimeoutId);
@@ -278,12 +298,18 @@ export class ChatGPTApi implements LLMApi {
         const message = this.extractMessage(resJson);
 
         if (
-          (!useUserStore.getState().is_vip ||
-            !this.serverConfig.vipCodes.has(this.code())) &&
-          useAccessStore.getState().auth
+          !useUserStore.getState().is_vip &&
+          !useAccessStore.getState().isVipCode(this.code()) &&
+          !useAccessStore.getState().auth
         ) {
           userapi.llm.updateWallet(1);
         }
+        // if (
+        //   !useUserStore.getState().is_vip &&
+        //   useAccessStore.getState().auth
+        // ) {
+        //   userapi.llm.updateWallet(1);
+        // }
         if (useAccessStore.getState().auth) {
           userapi.llm.addChatMessage(
             getBody("文字", message, modelConfig.model),

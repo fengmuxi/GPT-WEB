@@ -46,7 +46,6 @@ const VIP_CODES = (function getVipCodes(): Set<string> {
 
 const VIP_MODELS = (function getVipModels(): Set<string> {
   const model = process.env.VIP_MODEL;
-
   try {
     const models = (model?.split(",") ?? [])
       .filter((v) => !!v)
@@ -67,6 +66,8 @@ export const getServerSideConfig = () => {
   return {
     apiKey: process.env.OPENAI_API_KEY,
     code: process.env.CODE,
+    vipCode: process.env.VIP_CODE as string,
+    vipModel: process.env.VIP_MODEL as string,
     codes: ACCESS_CODES,
     vipCodes: VIP_CODES,
     vipModels: VIP_MODELS,

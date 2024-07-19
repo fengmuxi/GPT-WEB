@@ -35,6 +35,8 @@ export function auth(req: NextRequest) {
 
   const serverConfig = getServerSideConfig();
   console.log("[Auth] allowed hashed codes: ", [...serverConfig.codes]);
+  console.log("[Auth] allowed hashed vipcodes: ", [...serverConfig.vipCodes]);
+  console.log("[Auth] allowed hashed vipmodels: ", [...serverConfig.vipModels]);
   console.log("[Auth] got access code:", accessCode);
   console.log("[Auth] hashed access code:", hashedCode);
   console.log("[Auth] get auth:", auth);
