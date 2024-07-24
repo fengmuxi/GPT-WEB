@@ -43,6 +43,7 @@ export function Login() {
 
   useEffect(() => {
     getCode();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
