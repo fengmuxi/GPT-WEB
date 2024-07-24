@@ -398,7 +398,7 @@ export function MaskPage() {
     setSearchText(text);
     if (text.length > 0) {
       const result = allMasks.filter((m) =>
-        m.name.toLowerCase().includes(text.toLowerCase())
+        m.name.toLowerCase().includes(text.toLowerCase()),
       );
       setSearchMasks(result);
     } else {
@@ -530,7 +530,7 @@ export function MaskPage() {
                     <div className={styles["mask-info"] + " one-line"}>
                       {`${Locale.Mask.Item.Info(m.context.length)} / ${
                         ALL_LANG_OPTIONS[m.lang]
-                      } / ${m.modelConfig.model}`}
+                      } / ${m.modelConfig.name}`}
                     </div>
                   </div>
                 </div>

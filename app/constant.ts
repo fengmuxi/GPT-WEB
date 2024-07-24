@@ -101,18 +101,47 @@ export const SUMMARIZE_MODEL = "ep-20240719034240-fxfpz";
 
 export const DEFAULT_MODELS = [
   {
+    model: "Doubao-pro-128k",
+    name: "ep-20240722142320-4nc8j",
+    available: true,
+  },
+  {
+    model: "Doubao-pro-32k",
     name: "ep-20240719034240-fxfpz",
     available: true,
   },
   {
+    model: "Doubao-pro-4k",
+    name: "ep-20240722152005-cnbqn",
+    available: true,
+  },
+  {
+    model: "Doubao-lite-128k",
+    name: "ep-20240722142549-dfl5k",
+    available: true,
+  },
+  {
+    model: "Doubao-lite-32k",
+    name: "ep-20240719060310-tjsmk",
+    available: true,
+  },
+  {
+    model: "Doubao-lite-4k",
+    name: "ep-20240722142525-xl7s7",
+    available: true,
+  },
+  {
+    model: "ERNIE-Bot",
     name: "ERNIE-Bot",
     available: true,
   },
   {
+    model: "ERNIE-Bot-turbo",
     name: "ERNIE-Bot-turbo",
     available: true,
   },
   {
+    model: "Embedding-V1",
     name: "Embedding-V1",
     available: true,
   },

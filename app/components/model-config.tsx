@@ -21,18 +21,23 @@ export function ModelConfigList(props: {
         <Select
           value={props.modelConfig.model}
           onChange={(e) => {
-            props.updateConfig(
-              (config) =>
-                (config.model = ModalConfigValidator.model(
-                  e.currentTarget.value,
-                )),
-            );
+            props.updateConfig((config) => {
+              config.model = ModalConfigValidator.model(e.currentTarget.value);
+              config.name = ModalConfigValidator.model(
+                String(e.currentTarget.selectedOptions[0].dataset.value),
+              );
+            });
           }}
         >
           {config.allModels().map((v, i) => (
-            <option value={v.name} key={i} disabled={!v.available}>
-              {v.name}
-              {useUserStore.getState().isVipModel(v.name) ? "(vip)" : ""}
+            <option
+              value={v.name}
+              data-value={v.model}
+              key={i}
+              disabled={!v.available}
+            >
+              {v.model}
+              {useUserStore.getState().isVipModel(v.model) ? " (vip)" : ""}
             </option>
           ))}
         </Select>

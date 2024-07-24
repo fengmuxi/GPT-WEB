@@ -39,6 +39,7 @@ export interface LLMUsage {
 }
 
 export interface LLMModel {
+  model: string;
   name: string;
   available: boolean;
 }

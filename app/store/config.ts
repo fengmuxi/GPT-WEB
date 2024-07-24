@@ -46,7 +46,8 @@ export const DEFAULT_CONFIG = {
   models: DEFAULT_MODELS as any as LLMModel[],
 
   modelConfig: {
-    model: "ERNIE-Bot-turbo" as ModelType,
+    name: "Doubao-pro-32k",
+    model: "ep-20240719034240-fxfpz" as ModelType,
     temperature: 0.5,
     top_p: 1,
     max_tokens: 2000,
@@ -132,7 +133,7 @@ export const useAppConfig = createPersistStore(
       const customModels = get()
         .customModels.split(",")
         .filter((v) => !!v && v.length > 0)
-        .map((m) => ({ name: m, available: true }));
+        .map((m) => ({ model: m, name: m, available: true }));
       return get().models.concat(customModels);
     },
   }),

@@ -435,7 +435,7 @@ export function ChatActions(props: {
       config
         .allModels()
         .filter((m) => m.available)
-        .map((m) => m.name),
+        .map((m) => ({ model: m.model, name: m.name })),
     [config],
   );
   const [showModelSelector, setShowModelSelector] = useState(false);
@@ -519,8 +519,11 @@ export function ChatActions(props: {
         <Selector
           defaultSelectedValue={currentModel}
           items={models.map((m) => ({
-            title: m + (useAccessStore.getState().isVipModel(m) ? "(VIP)" : ""),
-            value: m,
+            title:
+              m.model +
+              (useAccessStore.getState().isVipModel(m.model) ? " (VIP)" : ""),
+            value: m.name,
+            name: m.model,
           }))}
           onClose={() => setShowModelSelector(false)}
           onSelection={(s) => {
@@ -529,7 +532,7 @@ export function ChatActions(props: {
               session.mask.modelConfig.model = s[0] as ModelType;
               session.mask.syncGlobalConfig = false;
             });
-            showToast(s[0]);
+            showToast(s[1]);
           }}
         />
       )}

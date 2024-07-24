@@ -33,7 +33,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -59,7 +60,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -85,7 +87,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -111,7 +114,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -137,7 +141,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -163,7 +168,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -189,7 +195,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -215,7 +222,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -247,7 +255,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 0.5,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -273,7 +282,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -306,7 +316,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -339,7 +350,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -397,7 +409,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 1,
       max_tokens: 2000,
       presence_penalty: 0,
@@ -429,7 +442,8 @@ export const CN_MASKS: BuiltinMask[] = [
       },
     ],
     modelConfig: {
-      model: "ERNIE-Bot-turbo",
+      model: "ep-20240719034240-fxfpz",
+      name: "Doubao-pro-32k",
       temperature: 0.5,
       max_tokens: 2000,
       presence_penalty: 0,

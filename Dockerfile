@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM m.daocloud.io/docker.io/library/node:18-alpine AS base
 
 FROM base AS deps
 RUN echo -e http://mirrors.ustc.edu.cn/alpine/v3.15/main/ > /etc/apk/repositories

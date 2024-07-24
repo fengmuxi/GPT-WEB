@@ -442,6 +442,7 @@ export function Selector<T>(props: {
     title: string;
     subTitle?: string;
     value: T;
+    name: T;
   }>;
   defaultSelectedValue?: T;
   onSelection?: (selection: T[]) => void;
@@ -461,7 +462,7 @@ export function Selector<T>(props: {
                 title={item.title}
                 subTitle={item.subTitle}
                 onClick={() => {
-                  props.onSelection?.([item.value]);
+                  props.onSelection?.([item.value, item.name]);
                   props.onClose?.();
                 }}
               >
